@@ -1,0 +1,6 @@
+customtkinter
+ollama
+requests
+pygame
+playsound
+sqlite3

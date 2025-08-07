@@ -1,0 +1,29 @@
+adventure-learning-quest
+├── src
+│   ├── app.py
+│   ├── ai
+│   │   ├── __init__.py
+│   │   ├── quest_master.py
+│   │   ├── narrator.py
+│   │   └── tutor.py
+│   ├── ui
+│   │   ├── __init__.py
+│   │   ├── main_window.py
+│   │   ├── game_area.py
+│   │   ├── chat_panel.py
+│   │   └── stats_panel.py
+│   ├── models
+│   │   ├── __init__.py
+│   │   ├── player.py
+│   │   └── question.py
+│   └── utils
+│       ├── __init__.py
+│       ├── config.py
+│       └── data_manager.py
+├── assets
+│   ├── icons
+│   └── themes
+├── saves
+├── requirements.txt
+├── setup.py
+└── README.md
