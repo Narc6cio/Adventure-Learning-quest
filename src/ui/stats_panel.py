@@ -1,11 +1,16 @@
 import customtkinter as ctk
+import threading
+
 
 class StatsPanel(ctk.CTkFrame):
-    def __init__(self, parent, player_data):
+    def __init__(self, parent, player_data, game_area):
         super().__init__(parent, width=250)
         self.grid_propagate(False)
         self.player_data = player_data
+        self.game_area = game_area
         self.create_widgets()
+        self.create_evaluation_shortcut()
+        
 
     def create_widgets(self):
         # Titre du panneau
@@ -95,8 +100,40 @@ class StatsPanel(ctk.CTkFrame):
         """Met à jour l'affichage de l'historique"""
         self.history_text.delete("0.0", "end")
         
+        if not self.player_data["history"]:
+            self.history_text.insert("end", "Aucun historique pour le moment")
+            return
+        
         recent_history = self.player_data["history"][-10:]  # 10 dernières entrées
         for entry in reversed(recent_history):
             result = "✅" if entry["is_correct"] else "❌"
-            text = f"{result} {entry['question'][:30]}...\n"
+            question = entry['question']
+            if len(question) > 30:
+                question = question[:27] + "..."
+            text = f"{result} {question}\n"
             self.history_text.insert("end", text)
+    
+    def create_evaluation_shortcut(self):
+        """Ajoute un bouton pour accéder rapidement à l'évaluation"""
+        eval_btn = ctk.CTkButton(
+            self,
+            text="💡 Voir l'analyse complète",
+            command=self.show_full_evaluation,
+            height=30,
+            fg_color="transparent",
+            border_width=1
+        )
+        eval_btn.pack(pady=10)
+    
+    def show_full_evaluation(self):
+        """Déclenche l'affichage de l'évaluation dans la zone centrale"""
+        if hasattr(self.game_area, "generate_evaluation"):
+            # Assurez-vous que la frame est visible
+            self.game_area.evaluation_frame.pack(fill="x", padx=20, pady=10)
+            
+            # Déclenche la génération
+            self.game_area.generate_evaluation()
+            
+            # Défilement vers la zone d'évaluation
+            self.game_area.evaluation_text.see("end")
+
